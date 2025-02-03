@@ -1,42 +1,55 @@
-import React, { Component, useState } from "react";
-import '../styles/App.css';
+import React, { Component } from "react";
+import "./styles.css"; // Import CSS file for styling
 
 class App extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            renderBall: false,
-            posi : 0,
-            ballPosition: { left: "0px" }
-        };
-        this.renderChoice = this.renderBallOrButton.bind(this)
-        this.buttonClickHandler = this.buttonClickHandler.bind(this)
+  constructor(props) {
+    super(props);
+    this.state = {
+      ballVisible: false, // Initially, ball is hidden
+      position: 0, // Ball's initial left position
     };
+  }
 
-    buttonClickHandler() {
-   
-   }
-    renderBallOrButton() {
-		if (this.state.renderBall) {
-		    return <div className="ball" style={this.state.ballPosition}></div>
-		} else {
-		    return <button onClick={this.buttonClickHandler} >Start</button>
-		}
-    }
+  buttonClickHandler = () => {
+    this.setState({ ballVisible: true }); // Show ball, hide button
+  };
 
-    // bind ArrowRight keydown event
-    componentDidMount() {
-      
+  handleKeyPress = (event) => {
+    if (event.key === "ArrowRight" || event.keyCode === 39) {
+      this.setState((prevState) => ({
+        position: prevState.position + 5, // Move ball 5px right
+      }));
     }
+  };
 
-    render() {
-        return (
-            <div className="playground">
-                {this.renderBallOrButton()}
-            </div>
-        )
+  componentDidMount() {
+    document.addEventListener("keydown", this.handleKeyPress);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.handleKeyPress);
+  }
+
+  renderChoice = () => {
+    if (!this.state.ballVisible) {
+      return (
+        <button className="start" onClick={this.buttonClickHandler}>
+          Start
+        </button>
+      );
+    } else {
+      return <div className="ball" style={{ left: this.state.position + "px" }}></div>;
     }
+  };
+
+  render() {
+    return (
+      <div className="game-container">
+        <h1>Golf Game ⛳</h1>
+        {this.renderChoice()}
+      </div>
+    );
+  }
 }
-
 
 export default App;
