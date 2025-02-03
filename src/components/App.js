@@ -1,26 +1,29 @@
 import React, { Component } from "react";
-import "./styles.css"; // Import CSS file for styling
+import "./styles.css";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ballVisible: false, // Initially, ball is hidden
-      position: 0, // Ball's initial left position
+      ballVisible: false,
+      position: 0,
     };
+
+    this.buttonClickHandler = this.buttonClickHandler.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
-  buttonClickHandler = () => {
-    this.setState({ ballVisible: true }); // Show ball, hide button
-  };
+  buttonClickHandler() {
+    this.setState({ ballVisible: true });
+  }
 
-  handleKeyPress = (event) => {
+  handleKeyPress(event) {
     if (event.key === "ArrowRight" || event.keyCode === 39) {
       this.setState((prevState) => ({
-        position: prevState.position + 5, // Move ball 5px right
+        position: prevState.position + 5,
       }));
     }
-  };
+  }
 
   componentDidMount() {
     document.addEventListener("keydown", this.handleKeyPress);
@@ -30,7 +33,7 @@ class App extends Component {
     document.removeEventListener("keydown", this.handleKeyPress);
   }
 
-  renderChoice = () => {
+  renderChoice() {
     if (!this.state.ballVisible) {
       return (
         <button className="start" onClick={this.buttonClickHandler}>
@@ -40,7 +43,7 @@ class App extends Component {
     } else {
       return <div className="ball" style={{ left: this.state.position + "px" }}></div>;
     }
-  };
+  }
 
   render() {
     return (
